@@ -1,0 +1,29 @@
+definitions:
+  query.QueryRequest:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+      query:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /search:
+    get:
+      parameters:
+      - description: 查询数据参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/query.QueryRequest'
+      responses:
+        "200":
+          description: OK
+      summary: 查询数据
+      tags:
+      - search
+swagger: "2.0"
