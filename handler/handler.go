@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
 	"net/http"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/pkg/errno"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

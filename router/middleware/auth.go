@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"github.com/muxih4ck/Go-Web-Application-Template/handler"
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/token"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/pkg/errno"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/pkg/token"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

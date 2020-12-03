@@ -1,5 +1,3 @@
-// zap是uber开发的一个高性能的日志包
-// lumberjack是用于持久化日志的包
 package log
 
 import (

@@ -3,8 +3,9 @@ package config
 import (
 	"strings"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
 	"github.com/spf13/viper"
+
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
 )
 
 type Config struct {

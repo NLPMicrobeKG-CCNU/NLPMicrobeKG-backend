@@ -3,11 +3,12 @@ package router
 import (
 	"net/http"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/handler/sd"
-	"github.com/muxih4ck/Go-Web-Application-Template/handler/user"
-	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
-
 	"github.com/gin-gonic/gin"
+
+	search "github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler/query"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler/sd"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/model"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router/middleware"
 )
 
 // Load loads the middlewares, routes, handlers.
@@ -23,20 +24,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
 
-	// api for authentication functionalities
-	g.POST("/login", user.Login)
-
-	// The user handlers, requiring authentication
-	u := g.Group("/v1/user")
-	u.Use(middleware.AuthMiddleware())
-	{
-		u.POST("", user.Create)
-		u.DELETE("/:id", user.Delete)
-		u.PUT("/:id", user.Update)
-		u.GET("", user.List)
-		u.GET("/:username", user.Get)
-	}
-
 	// The health check handlers
 	svcd := g.Group("/sd")
 	{
@@ -44,6 +31,16 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/disk", sd.DiskCheck)
 		svcd.GET("/cpu", sd.CPUCheck)
 		svcd.GET("/ram", sd.RAMCheck)
+	}
+
+	apiVersionString := "/api/v1"
+
+	g.Use(middleware.URLAccessStatistics(model.DB.Redis))
+
+	s := g.Group(apiVersionString + "search")
+	s.Use(middleware.IPLimit(model.DB.Redis))
+	{
+		s.GET("/", search.Query)
 	}
 
 	return g

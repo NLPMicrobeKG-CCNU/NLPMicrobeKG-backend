@@ -2,18 +2,21 @@ package model
 
 import (
 	"fmt"
-	"go.uber.org/zap"
+	"time"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
+	"github.com/garyburd/redigo/redis"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 
 	// MySQL driver.
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
 )
 
 type Database struct {
-	Self *gorm.DB
+	Redis *redis.Pool
 }
 
 var DB *Database
@@ -47,24 +50,53 @@ func setupDB(db *gorm.DB) {
 	db.DB().SetMaxIdleConns(0) // 用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
 }
 
-// used for cli
-func InitSelfDB() *gorm.DB {
-	return openDB(viper.GetString("db.username"),
-		viper.GetString("db.password"),
-		viper.GetString("db.addr"),
-		viper.GetString("db.name"))
+func openRedis(server, password string) (conn *redis.Pool) {
+	pool := &redis.Pool{
+		// 初始化链接数量
+		MaxIdle:     200,
+		MaxActive:   0,
+		IdleTimeout: 300 * time.Second,
+		Dial: func() (redis.Conn, error) {
+			return DialRedis(server, password)
+		},
+	}
+
+	return pool
 }
 
-func GetSelfDB() *gorm.DB {
-	return InitSelfDB()
+func InitRedis() *redis.Pool {
+	server := viper.GetString("redis.addr")
+	password := viper.GetString("redis.password")
+	conn := openRedis(server, password)
+	return conn
+}
+
+func GetRedis() *redis.Pool {
+	return InitRedis()
+}
+
+func DialRedis(server, password string) (redis.Conn, error) {
+	conn, err := redis.Dial("tcp", server)
+	if err != nil {
+		log.Error("Open redis failed",
+			zap.String("reason", err.Error()),
+			zap.String("detail", fmt.Sprintf("Redis connection failed. Database name: %s", server)))
+		return nil, err
+	}
+
+	return conn, nil
 }
 
 func (db *Database) Init() {
 	DB = &Database{
-		Self: GetSelfDB(),
+		Redis: GetRedis(),
 	}
 }
 
+func (db *Database) RedisClose() {
+	DB.Redis.Close()
+}
+
 func (db *Database) Close() {
-	DB.Self.Close()
+	db.RedisClose()
 }

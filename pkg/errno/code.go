@@ -15,4 +15,6 @@ var (
 	ErrUserNotFound      = &Errno{Code: 20102, Message: "The user was not found."}
 	ErrTokenInvalid      = &Errno{Code: 20103, Message: "The token was invalid."}
 	ErrPasswordIncorrect = &Errno{Code: 20104, Message: "The password was incorrect."}
+
+	ErrRequestTooQuick = &Errno{Code: 40001, Message: "The request was too quick."}
 )

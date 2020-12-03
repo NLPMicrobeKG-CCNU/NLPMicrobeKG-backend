@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/config"
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/router"
-	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/config"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/model"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
