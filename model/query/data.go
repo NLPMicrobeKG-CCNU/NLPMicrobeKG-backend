@@ -2,11 +2,13 @@ package query
 
 import (
 	"encoding/json"
-	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service"
+	"fmt"
+
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 )
 
 type DataQueryResponse struct {
-	Head DataHead `json:"head"`
+	Head    DataHead    `json:"head"`
 	Results DataResults `json:"results"`
 }
 
@@ -15,36 +17,36 @@ type DataHead struct {
 }
 
 type Compoundname struct {
-	Type string `json:"type"`
+	Type  string `json:"type"`
 	Value string `json:"value"`
 }
 
 type Unit struct {
-	Type string `json:"type"`
+	Type  string `json:"type"`
 	Value string `json:"value"`
 }
 
 type Foodname struct {
-	Type string `json:"type"`
+	Type  string `json:"type"`
 	Value string `json:"value"`
 }
 
 type Modulename struct {
-	Type string `json:"type"`
+	Type  string `json:"type"`
 	Value string `json:"value"`
 }
 
 type Mount struct {
-	Type string `json:"type"`
+	Type  string `json:"type"`
 	Value string `json:"value"`
 }
 
 type DataBindings struct {
 	Compoundname Compoundname `json:"compoundname"`
-	Unit Unit `json:"unit"`
-	Foodname Foodname `json:"foodname"`
-	Modulename Modulename `json:"modulename"`
-	Mount Mount `json:"mount"`
+	Unit         Unit         `json:"unit"`
+	Foodname     Foodname     `json:"foodname"`
+	Modulename   Modulename   `json:"modulename"`
+	Mount        Mount        `json:"mount"`
 }
 
 type DataResults struct {
@@ -53,16 +55,29 @@ type DataResults struct {
 
 type DataResponse struct {
 	Compoundname string `json:"compoundname"`
-	Unit string `json:"unit"`
-	Foodname string `json:"foodname"`
-	Modulename string `json:"modulename"`
-	Mount string `json:"mount"`
+	Unit         string `json:"unit"`
+	Foodname     string `json:"foodname"`
+	Modulename   string `json:"modulename"`
+	Mount        string `json:"mount"`
+	Bacname      string `json:"bacname"`
 }
 
-func DataQueryInfo(query string, limit, offset int) ([]*DataQueryResponse, error) {
-	var res []*DataQueryResponse
+// DataQuery returns results of data query.
+func DataQuery(query, bacname string, limit, offset int) ([]*DataResponse, error) {
+	res, err := GetDataQueryRes(query, limit, offset)
+	if err != nil {
+		return []*DataResponse{}, err
+	}
 
-	raw, err := service.QueryInfo(query, limit, offset)
+	return TransformToData(res, bacname)
+}
+
+// GetTextQueryRes returns raw graphdb query response in type of data.
+func GetDataQueryRes(query string, limit, offset int) (*DataQueryResponse, error) {
+	var res *DataQueryResponse
+
+	raw, err := graphDB.QueryInfo(query, limit, offset)
+	fmt.Println(string(raw))
 	if err != nil {
 		return res, err
 	}
@@ -75,12 +90,12 @@ func DataQueryInfo(query string, limit, offset int) ([]*DataQueryResponse, error
 	return res, nil
 }
 
-
-func TransformInData(req []*DataQueryResponse) ([]*DataResponse, error) {
+// TransformToData transform graphdb query response into service data response.
+func TransformToData(req *DataQueryResponse, bacname string) ([]*DataResponse, error) {
 	var resp []*DataResponse
-	list := req[0]
-	for _, item := range list.Results.Bindings {
+	for _, item := range req.Results.Bindings {
 		resp = append(resp, &DataResponse{
+			Bacname:      bacname,
 			Compoundname: item.Compoundname.Value,
 			Unit:         item.Unit.Value,
 			Foodname:     item.Foodname.Value,
@@ -88,5 +103,6 @@ func TransformInData(req []*DataQueryResponse) ([]*DataResponse, error) {
 			Mount:        item.Mount.Value,
 		})
 	}
+
 	return resp, nil
 }

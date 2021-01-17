@@ -3,12 +3,12 @@ package handler
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/pkg/errno"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
-
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type Response struct {

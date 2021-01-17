@@ -1,29 +1,140 @@
 definitions:
-  query.QueryRequest:
+  query.Data:
     properties:
-      limit:
+      edges:
+        items:
+          $ref: '#/definitions/query.Edge'
+        type: array
+      nodes:
+        items:
+          $ref: '#/definitions/query.Node'
+        type: array
+      sum:
         type: integer
-      offset:
+    type: object
+  query.DataResponse:
+    properties:
+      bacname:
+        type: string
+      compoundname:
+        type: string
+      foodname:
+        type: string
+      modulename:
+        type: string
+      mount:
+        type: string
+      unit:
+        type: string
+    type: object
+  query.Edge:
+    properties:
+      label:
+        type: string
+      source:
+        type: string
+      target:
+        type: string
+    type: object
+  query.Node:
+    properties:
+      color:
         type: integer
-      query:
+      id:
+        type: string
+      label:
+        type: string
+      node_properties:
+        items:
+          $ref: '#/definitions/query.NodeProperties'
+        type: array
+      rank:
+        type: number
+      type:
+        items:
+          type: string
+        type: array
+    type: object
+  query.NodeProperties:
+    properties:
+      title:
+        type: string
+      value:
+        items:
+          type: string
+        type: array
+    type: object
+  query.TextResponse:
+    properties:
+      bac2name:
+        type: string
+      bac3name:
+        type: string
+      bac4name:
+        type: string
+      bacname:
+        type: string
+      disname:
+        type: string
+      ref2:
+        type: string
+      ref3:
+        type: string
+      ref4:
+        type: string
+      reference:
         type: string
     type: object
 info:
   contact: {}
 paths:
-  /search:
+  /graph:
     get:
       parameters:
-      - description: 查询数据参数
-        in: body
-        name: data
+      - description: 查询数据
+        in: query
+        name: search_value
         required: true
-        schema:
-          $ref: '#/definitions/query.QueryRequest'
+        type: string
       responses:
         "200":
           description: OK
-      summary: 查询数据
+          schema:
+            $ref: '#/definitions/query.Data'
+      summary: 查询数据(图数据)
+      tags:
+      - graph
+  /search:
+    get:
+      parameters:
+      - description: 查询类型 text / data
+        in: query
+        name: search_type
+        required: true
+        type: string
+      - description: 查询数据参数
+        in: query
+        name: query
+        required: true
+        type: string
+      - description: LIMIT <= 1000
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: NO RESTRICTIONS
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/query.DataResponse'
+            type: array
+      summary: 查询数据(表显示)
       tags:
       - search
 swagger: "2.0"

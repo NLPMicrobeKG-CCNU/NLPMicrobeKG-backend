@@ -4,42 +4,210 @@
         "contact": {}
     },
     "paths": {
+        "/graph": {
+            "get": {
+                "tags": [
+                    "graph"
+                ],
+                "summary": "查询数据(图数据)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "查询数据",
+                        "name": "search_value",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/query.Data"
+                        }
+                    }
+                }
+            }
+        },
         "/search": {
             "get": {
                 "tags": [
                     "search"
                 ],
-                "summary": "查询数据",
+                "summary": "查询数据(表显示)",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "查询类型 text / data",
+                        "name": "search_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "查询数据参数",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/query.QueryRequest"
-                        }
+                        "name": "query",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "LIMIT \u003c= 1000",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "NO RESTRICTIONS",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/query.DataResponse"
+                            }
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
-        "query.QueryRequest": {
+        "query.Data": {
             "type": "object",
             "properties": {
-                "limit": {
+                "edges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/query.Edge"
+                    }
+                },
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/query.Node"
+                    }
+                },
+                "sum": {
+                    "type": "integer"
+                }
+            }
+        },
+        "query.DataResponse": {
+            "type": "object",
+            "properties": {
+                "bacname": {
+                    "type": "string"
+                },
+                "compoundname": {
+                    "type": "string"
+                },
+                "foodname": {
+                    "type": "string"
+                },
+                "modulename": {
+                    "type": "string"
+                },
+                "mount": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "query.Edge": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            }
+        },
+        "query.Node": {
+            "type": "object",
+            "properties": {
+                "color": {
                     "type": "integer"
                 },
-                "offset": {
-                    "type": "integer"
+                "id": {
+                    "type": "string"
                 },
-                "query": {
+                "label": {
+                    "type": "string"
+                },
+                "node_properties": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/query.NodeProperties"
+                    }
+                },
+                "rank": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "query.NodeProperties": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "query.TextResponse": {
+            "type": "object",
+            "properties": {
+                "bac2name": {
+                    "type": "string"
+                },
+                "bac3name": {
+                    "type": "string"
+                },
+                "bac4name": {
+                    "type": "string"
+                },
+                "bacname": {
+                    "type": "string"
+                },
+                "disname": {
+                    "type": "string"
+                },
+                "ref2": {
+                    "type": "string"
+                },
+                "ref3": {
+                    "type": "string"
+                },
+                "ref4": {
+                    "type": "string"
+                },
+                "reference": {
                     "type": "string"
                 }
             }

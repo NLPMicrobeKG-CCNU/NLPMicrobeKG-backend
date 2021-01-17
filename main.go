@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
+
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/config"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/model"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router/middleware"
-
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 )
 
 var (
@@ -29,6 +30,9 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+
+	// init request url
+	graphDB.InitRequestURL()
 
 	// logger sync
 	defer log.SyncLogger()

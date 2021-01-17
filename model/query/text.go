@@ -2,7 +2,9 @@ package query
 
 import (
 	"encoding/json"
-	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service"
+	"fmt"
+
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 )
 
 type TextQueryResponse struct {
@@ -71,6 +73,7 @@ type TextResults struct {
 }
 
 type TextResponse struct {
+	Bacname   string `json:"bacname"`
 	Reference string `json:"reference"`
 	Bac4Name  string `json:"bac4name"`
 	Ref4      string `json:"ref4"`
@@ -81,33 +84,22 @@ type TextResponse struct {
 	Disname   string `json:"disname"`
 }
 
-type Sentence struct {
-	Source        string `json:"source"`
-	Target        string `json:"target"`
-	RawPredicates string `json:"rawPredicates"`
-	Predicates    string `json:"predicates"`
+// TextQuery returns results of text query.
+func TextQuery(query, bacname string, limit, offset int) ([]*TextResponse, error) {
+	res, err := GetTextQueryRes(query, limit, offset)
+	if err != nil {
+		fmt.Println(err)
+		return []*TextResponse{}, err
+	}
+
+	return TransformToText(res, bacname)
 }
 
-type Data struct {
-	Edges []Edge `json:"edges"`
-	Nodes []Node `json:"nodes"`
-	Sum   uint32 `json:"sum"`
-}
+// GetTextQueryRes returns raw graphdb query response in type of text.
+func GetTextQueryRes(query string, limit, offset int) (*TextQueryResponse, error) {
+	var res *TextQueryResponse
 
-type Edge struct {
-	Source       string `json:"source"`
-	Target       string `json:"target"`
-	Relationship string `json:"label"`
-}
-
-type Node struct {
-	ID string `json:"id"`
-}
-
-func TextQueryInfo(query string, limit, offset int) ([]*TextQueryResponse, error) {
-	var res []*TextQueryResponse
-
-	raw, err := service.QueryInfo(query, limit, offset)
+	raw, err := graphDB.QueryInfo(query, limit, offset)
 	if err != nil {
 		return res, err
 	}
@@ -120,11 +112,12 @@ func TextQueryInfo(query string, limit, offset int) ([]*TextQueryResponse, error
 	return res, nil
 }
 
-func TransformInText(req []*TextQueryResponse) ([]*TextResponse, error) {
+// TransformToText transform graphdb query response into service text response.
+func TransformToText(req *TextQueryResponse, bacname string) ([]*TextResponse, error) {
 	var resp []*TextResponse
-	list := req[0]
-	for _, item := range list.Results.Bindings{
+	for _, item := range req.Results.Bindings {
 		resp = append(resp, &TextResponse{
+			Bacname:   bacname,
 			Reference: item.Reference.Value,
 			Bac4Name:  item.Bac4Name.Value,
 			Ref4:      item.Ref4.Value,
@@ -135,37 +128,6 @@ func TransformInText(req []*TextQueryResponse) ([]*TextResponse, error) {
 			Disname:   item.Disname.Value,
 		})
 	}
+
 	return resp, nil
-}
-
-func ParseInfo(info string) ([]*Sentence, error) {
-	var res []*Sentence
-	if err := json.Unmarshal([]byte(info), &res); err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
-func QuerySolve(info string) (*Data, error) {
-	var resp Data
-
-	req, err := ParseInfo(info)
-	if err != nil {
-		return nil, err
-	}
-
-	resp.Nodes = append(resp.Nodes, Node{ID: req[0].Source})
-	count := 1
-	for _, item := range req {
-		resp.Nodes = append(resp.Nodes, Node{ID: item.Target})
-		count++
-		resp.Edges = append(resp.Edges, Edge{
-			Source:       item.Source,
-			Target:       item.Target,
-			Relationship: item.Predicates,
-		})
-	}
-	resp.Sum = uint32(count)
-
-	return &resp, nil
 }

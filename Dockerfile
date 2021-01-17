@@ -1,8 +1,8 @@
-FROM golang:1.12.13 
+FROM golang:1.14.2
 ENV GO111MODULE "on"
 ENV GOPROXY "https://goproxy.cn"
-WORKDIR /src/Go-Web-Application-Template
-COPY . /src/Go-Web-Application-Template
+ADD . $GOPATH/src/github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/
+WORKDIR $GOPATH/src/github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/
 RUN make
-EXPOSE 8080
+EXPOSE 1203
 CMD ["./main", "-c", "conf/config.yaml"]

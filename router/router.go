@@ -5,9 +5,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/docs"
 	search "github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler/query"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler/sd"
-	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/model"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/router/middleware"
 )
 
@@ -35,12 +38,30 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	apiVersionString := "/api/v1"
 
-	g.Use(middleware.URLAccessStatistics(model.DB.Redis))
+	//g.Use(middleware.URLAccessStatistics(model.DB.Redis))
 
-	s := g.Group(apiVersionString + "search")
-	s.Use(middleware.IPLimit(model.DB.Redis))
+	s := g.Group(apiVersionString + "/search")
+	// search for default search
+	// type: text / data
+	//s.Use(middleware.IPLimit(model.DB.Redis))
 	{
-		s.GET("/", search.Query)
+		// /api/v1/search/
+		s.GET("", search.Query)
+	}
+
+	graph := g.Group(apiVersionString + "/graph")
+	// search for graph query
+	// graph search
+	//graph.Use(middleware.IPLimit(model.DB.Redis))
+	{
+		// /api/v1/graph
+		graph.GET("", search.GraphQuery)
+	}
+
+	// swagger API doc
+	swaggerRouter := g.Group(apiVersionString + "/swagger/*any")
+	{
+		swaggerRouter.GET("", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
 	return g
