@@ -55,6 +55,7 @@ type Node struct {
 	Properties []NodeProperties `json:"node_properties"`
 	Color      int              `json:"color"`
 	Data       struct{}         `json:"data"` // empty realize
+	Size       int              `json:"size"`
 }
 
 // Node details from graph db
@@ -96,7 +97,7 @@ func ParseNodeProperties(data []byte) ([]NodeProperties, error) {
 	for k, v := range transfer {
 		var title string
 		var value []string
-		if util.FormatNodeProperty(v[0].Type) {
+		if util.FormatNodeProperty(v[0].Type, k) {
 			title = "rdfs:label"
 		} else {
 			title = k
@@ -121,6 +122,20 @@ func ParseNodeDetails(data []byte) (RawNodeDetails, error) {
 	}
 
 	return res, nil
+}
+
+// ParseNodeDetails parses converted query string.
+func ParseConvertQueryResp(data []byte) (string, error) {
+	var res ConvertQueryRes
+	if err := json.Unmarshal(data, &res); err != nil {
+		return "", err
+	}
+
+	if len(res.Results.Bindings) == 0 {
+		return "", nil
+	}
+
+	return res.Results.Bindings[0].Bacid.Value, nil
 }
 
 // GraphQuery return query results from visual graph.
@@ -149,11 +164,13 @@ func GraphQuery(query string) (*Data, error) {
 	nodeRecord := make(map[string]bool)
 	for _, item := range req {
 		count++
-		resp.Edges = append(resp.Edges, Edge{
-			Source:       item.Source,
-			Target:       item.Target,
-			Relationship: strings.Join(item.Predicates, ", "),
-		})
+		for _, v := range item.Predicates {
+			resp.Edges = append(resp.Edges, Edge{
+				Source:       item.Source,
+				Target:       item.Target,
+				Relationship: v,
+			})
+		}
 
 		if !nodeRecord[item.Target] {
 			nodes = append(nodes, item.Target)
@@ -187,6 +204,7 @@ func GraphQuery(query string) (*Data, error) {
 			return &resp, err
 		}
 
+		v.Size = nodeDetails.Size
 		v.Types = util.FormatNodeTypeStr(nodeDetails.Types)
 
 		typeStr := strings.Join(v.Types, ",")
@@ -213,4 +231,46 @@ func GraphQuery(query string) (*Data, error) {
 	resp.Sum = uint32(count)
 
 	return &resp, nil
+}
+
+type ConvertQueryResHead struct {
+	Vars []string `json:"vars"`
+}
+
+type ConvertQueryResResults struct {
+	Bindings []ConvertQueryResBinding `json:"bindings"`
+}
+
+type ConvertQueryResBinding struct {
+	Bacid Bacid `json:"bacid"`
+}
+
+type Bacid struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
+
+type ConvertQueryRes struct {
+	Head    ConvertQueryResHead    `json:"head"`
+	Results ConvertQueryResResults `json:"results"`
+}
+
+// ConvertQueryString convert search value to whole query string.
+func ConvertQueryString(searchValue string) (string, error) {
+	var res string
+
+	query := fmt.Sprintf(`select ?bacid {
+?bacid rdfs:label "%s";
+}`, searchValue)
+	rawRes, err := graphDB.QueryInfo(query, 1000, 0)
+	if err != nil {
+		return res, err
+	}
+
+	res, err = ParseConvertQueryResp(rawRes)
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
 }

@@ -23,8 +23,8 @@ func FormatNodeTypeStr(strs []string) []string {
 }
 
 // FormatNodeProperty format node property.
-func FormatNodeProperty(property string) bool {
-	if property == "lt:http://www.w3.org/2001/XMLSchema#string" || property == "ll:en" {
+func FormatNodeProperty(property, title string) bool {
+	if property == "ll:en" || title == "http://www.w3.org/2000/01/rdf-schema#label" {
 		return true
 	}
 

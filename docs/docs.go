@@ -146,6 +146,10 @@ var doc = `{
         "query.Edge": {
             "type": "object",
             "properties": {
+                "data": {
+                    "description": "empty realize",
+                    "type": "object"
+                },
                 "label": {
                     "type": "string"
                 },
@@ -163,6 +167,10 @@ var doc = `{
                 "color": {
                     "type": "integer"
                 },
+                "data": {
+                    "description": "empty realize",
+                    "type": "object"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -177,6 +185,9 @@ var doc = `{
                 },
                 "rank": {
                     "type": "number"
+                },
+                "size": {
+                    "type": "integer"
                 },
                 "type": {
                     "type": "array",

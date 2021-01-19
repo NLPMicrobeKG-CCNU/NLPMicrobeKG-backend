@@ -132,7 +132,14 @@ where{
 // @Success 200 {object} dbQuery.Data
 // @Router /graph [GET]
 func GraphQuery(c *gin.Context) {
-	query := c.DefaultQuery("search_value", "")
+	searchValue := c.DefaultQuery("search_value", "")
+
+	query, err := dbQuery.ConvertQueryString(searchValue)
+	if err != nil {
+		fmt.Println(err)
+		handler.SendError(c, errno.InternalServerError, nil, "query info error")
+		return
+	}
 
 	res, err := dbQuery.GraphQuery(query)
 	if err != nil {
