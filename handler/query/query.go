@@ -33,7 +33,7 @@ func Query(c *gin.Context) {
 	requestBody.Query = c.DefaultQuery("query", "")
 	searchType := c.DefaultQuery("search_type", "text")
 	limitStr := c.DefaultQuery("limit", "1000")
-	offsetStr := c.DefaultQuery("offset", "0")
+	pageStr := c.DefaultQuery("page", "0")
 
 	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
@@ -42,7 +42,7 @@ func Query(c *gin.Context) {
 		return
 	}
 
-	offset, err := strconv.Atoi(offsetStr)
+	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		fmt.Println(err)
 		handler.SendError(c, errno.InternalServerError, nil, "query info error")
@@ -53,7 +53,7 @@ func Query(c *gin.Context) {
 		limit = 1000
 	}
 	requestBody.Limit = limit
-	requestBody.Offset = offset
+	requestBody.Offset = page * limit
 
 	var query string
 	var res interface{}
