@@ -2,8 +2,6 @@ package query
 
 import (
 	"encoding/json"
-	"fmt"
-
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 )
 
@@ -41,12 +39,18 @@ type Mount struct {
 	Value string `json:"value"`
 }
 
+type Foodid struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
+
 type DataBindings struct {
 	Compoundname Compoundname `json:"compoundname"`
 	Unit         Unit         `json:"unit"`
 	Foodname     Foodname     `json:"foodname"`
 	Modulename   Modulename   `json:"modulename"`
 	Mount        Mount        `json:"mount"`
+	Foodid       Foodid       `json:"foodid"`
 }
 
 type DataResults struct {
@@ -59,6 +63,7 @@ type DataResponse struct {
 	Foodname     string `json:"foodname"`
 	Modulename   string `json:"modulename"`
 	Mount        string `json:"mount"`
+	Foodid       string `json:"foodid"`
 	Bacname      string `json:"bacname"`
 }
 
@@ -77,7 +82,6 @@ func GetDataQueryRes(query string, limit, offset int) (*DataQueryResponse, error
 	var res *DataQueryResponse
 
 	raw, err := graphDB.QueryInfo(query, limit, offset)
-	fmt.Println(string(raw))
 	if err != nil {
 		return res, err
 	}
@@ -95,12 +99,13 @@ func TransformToData(req *DataQueryResponse, bacname string) ([]*DataResponse, e
 	var resp []*DataResponse
 	for _, item := range req.Results.Bindings {
 		resp = append(resp, &DataResponse{
-			Bacname:      bacname,
 			Compoundname: item.Compoundname.Value,
 			Unit:         item.Unit.Value,
 			Foodname:     item.Foodname.Value,
 			Modulename:   item.Modulename.Value,
 			Mount:        item.Mount.Value,
+			Foodid:       item.Foodid.Value,
+			Bacname:      bacname,
 		})
 	}
 

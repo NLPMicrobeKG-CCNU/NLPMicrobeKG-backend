@@ -2,6 +2,7 @@ package query
 
 import (
 	"fmt"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,7 @@ func Query(c *gin.Context) {
 	var requestBody QueryRequest
 	var err error
 
-	requestBody.Query = c.DefaultQuery("query", "")
+	requestBody.Query = util.FormatRequestQuery(c.DefaultQuery("query", ""))
 	searchType := c.DefaultQuery("search_type", "text")
 	limitStr := c.DefaultQuery("limit", "1000")
 	pageStr := c.DefaultQuery("page", "0")
@@ -98,7 +99,7 @@ where{
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix pq:<http://nlp_microbe.ccnu.edu.cn/pop/qualifier#>
 prefix ps:<http://nlp_microbe.ccnu.edu.cn/pop/statement#>
-select distinct ?bacname?modulename?compoundname?mount?unit?foodname
+select distinct ?bacname?modulename?compoundname?mount?unit?foodid?foodname
 where{
     {?bacid rdfs:label "%s";
            pq:hasPathways ?modules;
@@ -107,6 +108,7 @@ where{
     ?compound rdfs:label ?compoundname.
     {?food pq:hasNutrients ?compound;
           pq:hasNutrientWeights ?comp_w;
+          ps:hasIdentifier ?foodid;
           rdfs:label ?foodname.}
     {?comp_w ps:hasDescriptions ?mount;
              ps:hasMeasuringUnit ?unit.}

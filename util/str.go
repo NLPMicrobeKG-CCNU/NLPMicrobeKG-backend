@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"strings"
+	"unicode"
 )
 
 // FormatNodeTypeStr format node's type.
@@ -29,4 +30,15 @@ func FormatNodeProperty(property, title string) bool {
 	}
 
 	return false
+}
+
+// FormatRequestQuery format request query.
+func FormatRequestQuery(query string) string {
+	query = strings.TrimLeft(query, " ")
+	query = strings.TrimRight(query, " ")
+
+	lowerSlice := []rune(strings.ToLower(query))
+	res := fmt.Sprintf("%c%s", unicode.ToUpper(lowerSlice[0]), string(lowerSlice[1:]))
+
+	return res
 }
