@@ -17,4 +17,4 @@ redis:
   addr: 0.0.0.0:6379
 graphdb:
   addr: 0.0.0.0:7200
-  repository: NLPMicrobeKG
+  repository: MicrobeKG
