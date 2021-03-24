@@ -1,7 +1,9 @@
 name: Build and push docker image
 
 on:
-  push
+  push:
+    tags:
+    - 'release-*'
 
 jobs:
   build:
