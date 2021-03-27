@@ -2,7 +2,6 @@ package query
 
 import (
 	"fmt"
-	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +9,7 @@ import (
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/handler"
 	dbQuery "github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/model/query"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/pkg/errno"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/util"
 )
 
 type QueryRequest struct {
@@ -27,7 +27,7 @@ type QueryRequest struct {
 // @Success 200 {object} []dbQuery.TextResponse
 // @Success 200 {object} []dbQuery.DataResponse
 // @Router /search [GET]
-func Query(c *gin.Context) {
+func MicrobeKGQuery(c *gin.Context) {
 	var requestBody QueryRequest
 	var err error
 

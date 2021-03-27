@@ -46,7 +46,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	//s.Use(middleware.IPLimit(model.DB.Redis))
 	{
 		// /api/v1/search/
-		s.GET("", search.Query)
+		s.GET("/microbe", search.MicrobeKGQuery)
+		s.GET("/mdepression", search.MDepressionQuery)
 	}
 
 	graph := g.Group(apiVersionString + "/graph")
