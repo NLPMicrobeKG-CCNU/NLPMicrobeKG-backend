@@ -33,7 +33,7 @@ func Logging() gin.HandlerFunc {
 		path := c.Request.URL.Path
 
 		// Skip for the health check requests.
-		if path == "/sd/health" || path == "/sd/ram" || path == "/sd/cpu" || path == "/sd/disk" {
+		if path == "/sd/health" || path == "/sd/ram" || path == "/sd/cpu" || path == "/sd/disk" || path == "/api/v1/swagger/index.html#" {
 			return
 		}
 

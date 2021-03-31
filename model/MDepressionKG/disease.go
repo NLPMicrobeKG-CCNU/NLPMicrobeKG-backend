@@ -2,7 +2,6 @@ package MDepressionKG
 
 import (
 	"encoding/json"
-
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 )
 

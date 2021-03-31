@@ -2,7 +2,9 @@ package MDepressionKG
 
 import (
 	"encoding/json"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
+	"go.uber.org/zap"
 )
 
 type NFoodQueryResponse struct {
@@ -79,10 +81,12 @@ type FoodResponse struct {
 func FoodQuery(pQuery, nQuery, foodName string, limit, offset int) ([]*FoodResponse, error) {
 	pRes, err := GetPFoodQueryRes(pQuery, limit, offset)
 	if err != nil {
+		log.Error("food query(P) error", zap.String("cause", err.Error()))
 		return []*FoodResponse{}, err
 	}
 	nRes, err := GetNFoodQueryRes(nQuery, limit, offset)
 	if err != nil {
+		log.Error("food query(N) error", zap.String("cause", err.Error()))
 		return []*FoodResponse{}, err
 	}
 

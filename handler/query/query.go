@@ -26,7 +26,7 @@ type QueryRequest struct {
 // @Param offset query int true "NO RESTRICTIONS"
 // @Success 200 {object} []dbQuery.TextResponse
 // @Success 200 {object} []dbQuery.DataResponse
-// @Router /search [GET]
+// @Router /search/microbe [GET]
 func MicrobeKGQuery(c *gin.Context) {
 	var requestBody QueryRequest
 	var err error

@@ -49,7 +49,56 @@ var doc = `{
                 }
             }
         },
-        "/search": {
+        "/search/mdepression": {
+            "get": {
+                "tags": [
+                    "search"
+                ],
+                "summary": "查询 MDepression 数据(表显示)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "查询类型 diseases / food",
+                        "name": "search_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询数据参数",
+                        "name": "query",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "LIMIT \u003c= 1000",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "NO RESTRICTIONS",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/MDepressionKG.FoodResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/search/microbe": {
             "get": {
                 "tags": [
                     "search"

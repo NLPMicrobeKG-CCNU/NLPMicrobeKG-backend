@@ -20,12 +20,19 @@ import (
 // @Param offset query int true "NO RESTRICTIONS"
 // @Success 200 {object} []MDepressionKGQuery.DiseaseResponse
 // @Success 200 {object} []MDepressionKGQuery.FoodResponse
-// @Router /search [GET]
+// @Router /search/mdepression [GET]
 func MDepressionQuery(c *gin.Context) {
 	var requestBody QueryRequest
 	var err error
 
-	requestBody.Query = util.FormatRequestQuery(c.DefaultQuery("query", ""))
+	queryStr, err := util.ParseBase64(c.DefaultQuery("query", ""))
+	if err != nil {
+		fmt.Println(err)
+		handler.SendError(c, errno.InternalServerError, nil, "parse query failed")
+		return
+	}
+
+	requestBody.Query = util.FormatRequestQueryCaseInsensitivity(queryStr)
 	searchType := c.DefaultQuery("search_type", "diseases")
 	limitStr := c.DefaultQuery("limit", "1000")
 	pageStr := c.DefaultQuery("page", "0")
@@ -68,7 +75,7 @@ where {
           rdfs:label ?bacname;
           pq:hasAssociation ?syndrome.}
     {?syndrome rdf:type entity:Disease;
-            rdfs:label "%s".}
+            rdfs:label "%s"@en.}
 }`, requestBody.Query)
 		negativeQuery = fmt.Sprintf(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -83,7 +90,7 @@ where {
           rdfs:label ?bacname;
           pq:hasAssociation ?syndrome.}
     {?syndrome rdf:type entity:Disease;
-            rdfs:label "%s"}
+            rdfs:label "%s"@en.}
 }`, requestBody.Query)
 		res, err = MDepressionKGQuery.DiseaseQuery(positiveQuery, negativeQuery, requestBody.Query, requestBody.Limit, requestBody.Offset)
 		if err != nil {

@@ -191,7 +191,40 @@ paths:
       summary: 查询数据(图数据)
       tags:
       - graph
-  /search:
+  /search/mdepression:
+    get:
+      parameters:
+      - description: 查询类型 diseases / food
+        in: query
+        name: search_type
+        required: true
+        type: string
+      - description: 查询数据参数
+        in: query
+        name: query
+        required: true
+        type: string
+      - description: LIMIT <= 1000
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: NO RESTRICTIONS
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/MDepressionKG.FoodResponse'
+            type: array
+      summary: 查询 MDepression 数据(表显示)
+      tags:
+      - search
+  /search/microbe:
     get:
       parameters:
       - description: 查询类型 text / data
