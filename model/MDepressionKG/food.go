@@ -128,8 +128,8 @@ func TransformToFood(pReq *PFoodQueryResponse, nReq *NFoodQueryResponse, foodNam
 	var resp []*FoodResponse
 	for _, item := range pReq.Results.Bindings {
 		resp = append(resp, &FoodResponse{
-			Bacname:      nil,
-			Bac:          nil,
+			Bacname:      FoodBacname{},
+			Bac:          FoodBac{},
 			CompoundName: item.Compoundname,
 			Compound:     item.Compound,
 			Food:         foodName,
