@@ -127,9 +127,10 @@ func GetPFoodQueryRes(query string, limit, offset int) (*PFoodQueryResponse, err
 func TransformToFood(pReq *PFoodQueryResponse, nReq *NFoodQueryResponse, foodName string) ([]*FoodResponse, error) {
 	var resp []*FoodResponse
 	for _, item := range pReq.Results.Bindings {
+		// 积极部分不需要病菌信息，故返回空结构体
 		resp = append(resp, &FoodResponse{
-			Bacname:      nil,
-			Bac:          nil,
+			Bacname:      FoodBacname{},
+			Bac:          FoodBac{},
 			CompoundName: item.Compoundname,
 			Compound:     item.Compound,
 			Food:         foodName,
