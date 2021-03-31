@@ -39,9 +39,9 @@ type DiseaseResults struct {
 }
 
 type DiseaseResponse struct {
-	Bacname         DiseaseBacname `json:"bacname"`
-	Bac             DiseaseBac     `json:"bac"`
-	Syndrome        Syndrome       `json:"syndrome"`
+	Bacname         string `json:"bacname"`
+	Bac             string     `json:"bac"`
+	Syndrome        string      `json:"syndrome"`
 	Type            string         `json:"type"`
 	RelevantDisease string         `json:"relevant_disease"`
 }
@@ -82,18 +82,18 @@ func TransformToDisease(pReq *DiseaseQueryResponse, nReq *DiseaseQueryResponse, 
 	var resp []*DiseaseResponse
 	for _, item := range pReq.Results.Bindings {
 		resp = append(resp, &DiseaseResponse{
-			Bacname:         item.Bacname,
-			Bac:             item.Bac,
-			Syndrome:        item.Syndrome,
+			Bacname:         item.Bacname.Value,
+			Bac:             item.Bac.Value,
+			Syndrome:        item.Syndrome.Value,
 			RelevantDisease: relevantDiseaseName,
 			Type:            "Positive",
 		})
 	}
 	for _, item := range nReq.Results.Bindings {
 		resp = append(resp, &DiseaseResponse{
-			Bacname:         item.Bacname,
-			Bac:             item.Bac,
-			Syndrome:        item.Syndrome,
+			Bacname:         item.Bacname.Value,
+			Bac:             item.Bac.Value,
+			Syndrome:        item.Syndrome.Value,
 			RelevantDisease: relevantDiseaseName,
 			Type:            "Negative",
 		})

@@ -69,10 +69,10 @@ type PFoodResults struct {
 }
 
 type FoodResponse struct {
-	Bacname      FoodBacname  `json:"bacname"`
-	Bac          FoodBac      `json:"bac"`
-	CompoundName Compoundname `json:"compoundname"`
-	Compound     Compound     `json:"compound"`
+	Bacname      string  `json:"bacname"`
+	Bac          string      `json:"bac"`
+	CompoundName string `json:"compoundname"`
+	Compound     string     `json:"compound"`
 	Food         string       `json:"food"`
 	Type         string       `json:"type"`
 }
@@ -133,20 +133,20 @@ func TransformToFood(pReq *PFoodQueryResponse, nReq *NFoodQueryResponse, foodNam
 	for _, item := range pReq.Results.Bindings {
 		// 积极部分不需要病菌信息，故返回空结构体
 		resp = append(resp, &FoodResponse{
-			Bacname:      FoodBacname{},
-			Bac:          FoodBac{},
-			CompoundName: item.Compoundname,
-			Compound:     item.Compound,
+			Bacname:      "",
+			Bac:          "",
+			CompoundName: item.Compoundname.Value,
+			Compound:     item.Compound.Value,
 			Food:         foodName,
 			Type:         "Positive",
 		})
 	}
 	for _, item := range nReq.Results.Bindings {
 		resp = append(resp, &FoodResponse{
-			Bacname:      item.Bacname,
-			Bac:          item.Bac,
-			CompoundName: item.Compoundname,
-			Compound:     item.Compound,
+			Bacname:      item.Bacname.Value,
+			Bac:          item.Bac.Value,
+			CompoundName: item.Compoundname.Value,
+			Compound:     item.Compound.Value,
 			Food:         foodName,
 			Type:         "Negative",
 		})
