@@ -2,7 +2,7 @@ package MDepressionKG
 
 import (
 	"encoding/json"
-	"fmt"
+
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
 	"go.uber.org/zap"
