@@ -97,7 +97,7 @@ func GetVisualGraphInfo(query string) ([]byte, error) {
 	}
 	req.URL.RawQuery = data.Encode()
 
-	req.Header.Add("X-GraphDB-Repository", "NLPMicrobeKG")
+	req.Header.Add("X-GraphDB-Repository", viper.GetString("graphdb.repository"))
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -131,7 +131,7 @@ func GetNodeDetails(node string) ([]byte, error) {
 	}
 	req.URL.RawQuery = data.Encode()
 
-	req.Header.Add("X-GraphDB-Repository", "NLPMicrobeKG")
+	req.Header.Add("X-GraphDB-Repository", viper.GetString("graphdb.repository"))
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -165,7 +165,7 @@ func GetNodeProperties(node string) ([]byte, error) {
 	}
 	req.URL.RawQuery = data.Encode()
 
-	req.Header.Add("X-GraphDB-Repository", "NLPMicrobeKG")
+	req.Header.Add("X-GraphDB-Repository", viper.GetString("graphdb.repository"))
 
 	res, err := client.Do(req)
 	if err != nil {

@@ -145,7 +145,7 @@ func GraphQuery(c *gin.Context) {
 
 	res, err := dbQuery.GraphQuery(query)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("graph query error: ", err)
 		handler.SendError(c, errno.InternalServerError, nil, "query info error")
 		return
 	}

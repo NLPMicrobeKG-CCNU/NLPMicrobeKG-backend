@@ -3,6 +3,8 @@ package query
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/log"
+	"go.uber.org/zap"
 	"strings"
 
 	"github.com/NLPMicrobeKG-CCNU/NLPMicrobeKG-backend/service/graphDB"
@@ -149,6 +151,7 @@ func GraphQuery(query string) (*Data, error) {
 
 	req, err := ParseGraphInfo(rawResponse)
 	if err != nil {
+		log.Error("parse graph info error", zap.String("error: ", err.Error()))
 		return nil, err
 	}
 
