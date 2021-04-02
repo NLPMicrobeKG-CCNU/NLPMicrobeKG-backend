@@ -117,9 +117,13 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX entity: <http://nlp_microbe.ccnu.edu.cn/entity#>
 prefix pq:<http://nlp_microbe.ccnu.edu.cn/pop/qualifier#>
 prefix ps:<http://nlp_microbe.ccnu.edu.cn/pop/statement#>
-select distinct ?depression?compound?compoundname?food where { 
+select distinct ?depression?bac?bacname?compound?compoundname?food where { 
 	?depression ps:hasIdentifier 'D003865'.
-    {?depression pq:hasPositiveAssociation  ?compound.}
+    {?depression pq:hasNegativeAssociation  ?bac;
+                 pq:hasNegativeAssociation  ?compound.}
+    {?bac rdf:type entity:BacteriaSpecies;
+          rdfs:label ?bacname;
+          pq:hasMetabolites ?compound.}
     {?compound rdf:type entity:Compounds;
             rdfs:label ?compoundname.}
     {?food pq:hasNutrients ?compound;
