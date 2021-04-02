@@ -149,88 +149,22 @@ var doc = `{
         }
     },
     "definitions": {
-        "MDepressionKG.Compound": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.Compoundname": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.DiseaseBac": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.DiseaseBacname": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
         "MDepressionKG.DiseaseResponse": {
             "type": "object",
             "properties": {
                 "bac": {
-                    "$ref": "#/definitions/MDepressionKG.DiseaseBac"
+                    "type": "string"
                 },
                 "bacname": {
-                    "$ref": "#/definitions/MDepressionKG.DiseaseBacname"
+                    "type": "string"
                 },
                 "relevant_disease": {
                     "type": "string"
                 },
                 "syndrome": {
-                    "$ref": "#/definitions/MDepressionKG.Syndrome"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.FoodBac": {
-            "type": "object",
-            "properties": {
-                "type": {
                     "type": "string"
                 },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.FoodBacname": {
-            "type": "object",
-            "properties": {
                 "type": {
-                    "type": "string"
-                },
-                "value": {
                     "type": "string"
                 }
             }
@@ -239,32 +173,21 @@ var doc = `{
             "type": "object",
             "properties": {
                 "bac": {
-                    "$ref": "#/definitions/MDepressionKG.FoodBac"
+                    "type": "string"
                 },
                 "bacname": {
-                    "$ref": "#/definitions/MDepressionKG.FoodBacname"
+                    "type": "string"
                 },
                 "compound": {
-                    "$ref": "#/definitions/MDepressionKG.Compound"
+                    "type": "string"
                 },
                 "compoundname": {
-                    "$ref": "#/definitions/MDepressionKG.Compoundname"
+                    "type": "string"
                 },
                 "food": {
                     "type": "string"
                 },
                 "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "MDepressionKG.Syndrome": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "value": {
                     "type": "string"
                 }
             }

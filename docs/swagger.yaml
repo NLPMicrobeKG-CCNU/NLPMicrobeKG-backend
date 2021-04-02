@@ -1,79 +1,30 @@
 definitions:
-  MDepressionKG.Compound:
-    properties:
-      type:
-        type: string
-      value:
-        type: string
-    type: object
-  MDepressionKG.Compoundname:
-    properties:
-      type:
-        type: string
-      value:
-        type: string
-    type: object
-  MDepressionKG.DiseaseBac:
-    properties:
-      type:
-        type: string
-      value:
-        type: string
-    type: object
-  MDepressionKG.DiseaseBacname:
-    properties:
-      type:
-        type: string
-      value:
-        type: string
-    type: object
   MDepressionKG.DiseaseResponse:
     properties:
       bac:
-        $ref: '#/definitions/MDepressionKG.DiseaseBac'
+        type: string
       bacname:
-        $ref: '#/definitions/MDepressionKG.DiseaseBacname'
+        type: string
       relevant_disease:
         type: string
       syndrome:
-        $ref: '#/definitions/MDepressionKG.Syndrome'
+        type: string
       type:
-        type: string
-    type: object
-  MDepressionKG.FoodBac:
-    properties:
-      type:
-        type: string
-      value:
-        type: string
-    type: object
-  MDepressionKG.FoodBacname:
-    properties:
-      type:
-        type: string
-      value:
         type: string
     type: object
   MDepressionKG.FoodResponse:
     properties:
       bac:
-        $ref: '#/definitions/MDepressionKG.FoodBac'
+        type: string
       bacname:
-        $ref: '#/definitions/MDepressionKG.FoodBacname'
+        type: string
       compound:
-        $ref: '#/definitions/MDepressionKG.Compound'
+        type: string
       compoundname:
-        $ref: '#/definitions/MDepressionKG.Compoundname'
+        type: string
       food:
         type: string
       type:
-        type: string
-    type: object
-  MDepressionKG.Syndrome:
-    properties:
-      type:
-        type: string
-      value:
         type: string
     type: object
   query.Data:
